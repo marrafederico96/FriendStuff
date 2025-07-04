@@ -71,18 +71,22 @@ public class GroupService {
 
 	@Transactional
 	public void addGroupMember(GroupMemberRequestDTO groupMemberRequestDTO) {
-		User user = userRepository.findByUsername(groupMemberRequestDTO.username())
-				.orElseThrow(() -> new UsernameNotFoundException(groupMemberRequestDTO.username() + " not found."));
-		Group group = groupRepository.findBygroupName(groupMemberRequestDTO.groupName())
-				.orElseThrow(() -> new GroupException(groupMemberRequestDTO.groupName() + " not found"));
+		String username = groupMemberRequestDTO.username().trim().toLowerCase();
+		String groupName = groupMemberRequestDTO.groupName();
+
+		User user = userRepository.findByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
+
+		Group group = groupRepository.findBygroupName(groupName)
+				.orElseThrow(() -> new GroupException(groupName + " not found"));
 
 		List<GroupMember> groupMembersList = group.getGroupMembers();
 
 		boolean exists = groupMembersList.stream()
-				.anyMatch(u -> u.getUser().getUsername().equals(groupMemberRequestDTO.username()));
+				.anyMatch(u -> u.getUser().getUsername().equals(username));
 
 		if (exists) {
-			throw new GroupException(groupMemberRequestDTO.username() + " already present");
+			throw new GroupException(username + " already present");
 		}
 
 		GroupMember groupMember = new GroupMember();
@@ -96,18 +100,20 @@ public class GroupService {
 
 	@Transactional
 	public void removeGroupMember(GroupMemberRequestDTO groupMemberRequestDTO) {
-		User user = userRepository.findByUsername(groupMemberRequestDTO.username())
-				.orElseThrow(() -> new UsernameNotFoundException(groupMemberRequestDTO.username() + " not found."));
+		String username = groupMemberRequestDTO.username().trim().toLowerCase();
+
+		User user = userRepository.findByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
 		Group group = groupRepository.findBygroupName(groupMemberRequestDTO.groupName())
 				.orElseThrow(() -> new GroupException(groupMemberRequestDTO.groupName() + " not found"));
 
 		List<GroupMember> groupMembersList = group.getGroupMembers();
 
 		boolean exists = groupMembersList.stream()
-				.anyMatch(u -> u.getUser().getUsername().equals(groupMemberRequestDTO.username()));
+				.anyMatch(u -> u.getUser().getUsername().equals(username));
 
 		if (!exists) {
-			throw new GroupException(groupMemberRequestDTO.username() + " not present");
+			throw new GroupException(username + " not present");
 		}
 
 		GroupMember groupMember = groupMemberRepository.findByUser(user)

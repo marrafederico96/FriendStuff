@@ -4,6 +4,6 @@ import java.math.BigDecimal;
 
 import jakarta.validation.constraints.NotNull;
 
-public record ExpenseContributionDTO(@NotNull BigDecimal mountOwed) {
+public record ExpenseContributionDTO(@NotNull BigDecimal amountOwed) {
 
 }

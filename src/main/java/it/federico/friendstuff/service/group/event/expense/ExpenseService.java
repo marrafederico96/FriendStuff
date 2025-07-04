@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import it.federico.friendstuff.dto.group.event.EventDTO;
 import it.federico.friendstuff.dto.group.event.expense.ExpenseDTO;
 import it.federico.friendstuff.exception.EventException;
 import it.federico.friendstuff.exception.ExpenseException;
@@ -39,12 +38,12 @@ public class ExpenseService {
 	}
 
 	@Transactional
-	public void addExpense(Authentication authentication, ExpenseDTO expenseDTO, EventDTO eventDTO) {
+	public void addExpense(Authentication authentication, ExpenseDTO expenseDTO) {
 		User user = userRepository.findByUsername(authentication.getName())
 				.orElseThrow(() -> new UsernameNotFoundException("user " + authentication.getName() + "not found"));
 
-		Event event = eventRepository.findByEventName(eventDTO.eventName())
-				.orElseThrow(() -> new EventException("Event" + eventDTO.eventName() + " not found"));
+		Event event = eventRepository.findByEventName(expenseDTO.eventName())
+				.orElseThrow(() -> new EventException("Event" + expenseDTO.eventName() + " not found"));
 
 		Expense expense = new Expense();
 		expense.setExpenseName(expenseDTO.expenseName());

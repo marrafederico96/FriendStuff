@@ -48,15 +48,15 @@ public class UserService {
 	@Transactional
 	public UserDataLoginDTO registerUser(UserDataRegisterDTO userDataRegisterDTO) {
 
-		if (userRepository.findByUsername(userDataRegisterDTO.username()).isPresent()) {
+		if (userRepository.findByUsername(userDataRegisterDTO.username().trim().toLowerCase()).isPresent()) {
 			throw new UserDataExistsException(userDataRegisterDTO.username() + " already in use.");
 		}
 
-		if (userRepository.findByEmail(userDataRegisterDTO.email()).isPresent()) {
-			throw new UserDataExistsException(userDataRegisterDTO.email() + " already in use.");
+		if (userRepository.findByEmail(userDataRegisterDTO.email().trim().toLowerCase()).isPresent()) {
+			throw new UserDataExistsException(userDataRegisterDTO.email().trim().toLowerCase() + " already in use.");
 		}
 
-		if (!userDataRegisterDTO.password().equals(userDataRegisterDTO.confirmPassword())) {
+		if (!userDataRegisterDTO.password().equals(userDataRegisterDTO.confirmPassword().trim())) {
 			throw new PasswordMismatchException("Password mismatch");
 		}
 

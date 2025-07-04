@@ -113,7 +113,7 @@ public class EventService {
 		return expenseList.stream()
 				.map(expense -> new ExpenseDTO(expense.getExpenseName(), expense.getAmount(),
 						expense.getExpenseDescription(), expense.getExpenseDate(), expense.isExpenseClose(),
-						expense.getExpenseContributions()))
+						expense.getExpenseContributions(), expense.getEvent().getEventName()))
 				.collect(Collectors.toList());
 	}
 }
