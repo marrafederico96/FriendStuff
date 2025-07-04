@@ -27,11 +27,6 @@ public class GroupDTO {
 		return dto;
 	}
 
-	public GroupDTO(String groupName) {
-		this.groupName = groupName;
-		this.groupDescription = "";
-	}
-
 	public String getGroupName() {
 		return groupName;
 	}

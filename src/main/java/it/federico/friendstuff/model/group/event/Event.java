@@ -70,6 +70,10 @@ public class Event {
 	public Event() {
 	}
 
+	public List<Expense> getExpenseList() {
+		return expenseList;
+	}
+
 	public Group getgroup() {
 		return group;
 	}

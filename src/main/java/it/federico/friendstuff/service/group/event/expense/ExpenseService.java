@@ -57,17 +57,19 @@ public class ExpenseService {
 
 		expenseRepository.save(expense);
 
-		List<String> participantUsernames = expenseDTO.participant();
-		if (participantUsernames == null || participantUsernames.isEmpty()) {
+		List<ExpenseContribution> expenseContribtions = expenseDTO.participant();
+		if (expenseContribtions == null || expenseContribtions.isEmpty()) {
 			throw new ExpenseException("No participants provided");
 		}
 
-		BigDecimal splitAmount = expenseDTO.amount().divide(BigDecimal.valueOf(participantUsernames.size()), 2,
+		BigDecimal splitAmount = expenseDTO.amount().divide(BigDecimal.valueOf(expenseContribtions.size()), 2,
 				RoundingMode.HALF_UP);
 
-		expenseDTO.participant().stream().forEach(username -> {
-			User participant = userRepository.findByUsername(username)
-					.orElseThrow(() -> new UsernameNotFoundException("Participant not found: " + username));
+		expenseDTO.participant().stream().forEach(expenseUser -> {
+			User participant = userRepository.findByUsername(
+					expenseUser.getUser().getUsername())
+					.orElseThrow(() -> new UsernameNotFoundException(
+							"Participant not found: " + expenseUser.getUser().getUsername()));
 			ExpenseContribution contribution = new ExpenseContribution();
 			contribution.setUser(participant);
 			contribution.setExpense(expense);

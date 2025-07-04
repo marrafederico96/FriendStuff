@@ -128,7 +128,7 @@ public class GroupService {
 	public GroupDTO findGroup(String groupName) {
 		Group group = groupRepository.findBygroupName(groupName)
 				.orElseThrow(() -> new GroupException("Gruppo non trovato"));
-		GroupDTO groupInfo = new GroupDTO(group.getGroupName());
+		GroupDTO groupInfo = new GroupDTO(group.getGroupName(), group.getDescription());
 		return groupInfo;
 	}
 
